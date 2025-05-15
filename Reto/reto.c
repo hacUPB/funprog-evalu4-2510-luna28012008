@@ -88,15 +88,7 @@ void ingresar_archivo() {
         fclose(archivo); 
         return; 
     }
-    // Volver a leer el contenido del archivo en la memoria dinámica
-    fseek(archivo, 0, SEEK_SET); // Volver al inicio del archivo
-    fread(contenido, 1, tamaño, archivo);
-    contenido[tamaño] = '\0'; // Asegurarse de que el contenido sea una cadena válida
-    // Imprimir el contenido del archivo
-    printf("Contenido del archivo:\n%s\n", contenido);
-    // Liberar la memoria asignada
-    free(contenido);
-    fclose(archivo); // Cerrar el archivo
+   
 }
 
 void calcular_estadisticas() {
