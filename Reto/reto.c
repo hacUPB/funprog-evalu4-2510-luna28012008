@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
 
 // Prototipos de funciones (se implementarán después)
 void ingresar_archivo();
@@ -57,14 +59,13 @@ int main() {
 void ingresar_archivo() {
     printf("Función para ingresar el archivo.\n");
   
+    char nombrearchivo[100];
 
     printf("Nombre del archivo (.txt): ");
     if (!fgets(nombrearchivo, sizeof(nombrearchivo), stdin)) {
         printf("Error al leer nombre.\n");
         return;
     }
-
-//eso retorna un puntero entonces lo niega para que entre al if y asi pueda decir que es falso.
 
     nombrearchivo[strcspn(nombrearchivo, "\n")] = 0;
 
@@ -75,20 +76,42 @@ void ingresar_archivo() {
         return;
     }
   
-    long tamaño = 0; 
+    long magnitud = 0; 
     int caracter; 
     
     while ((caracter = fgetc(archivo)) != EOF) {
-        tamaño++; 
+        magnitud++; 
     }
     
-    char *contenido = (char *)malloc(tamaño + 1); 
+    char *contenido = (char *)malloc(magnitud + 1); 
     if (!contenido) {
         printf("Error al asignar memoria.\n");
         fclose(archivo); 
         return; 
     }
    
+     rewind(archivo);
+
+     for (long i = 0; i < magnitud; i++) {
+        contenido[i] = fgetc(archivo);
+    }
+    contenido[magnitud] = '\0';
+
+     int espacios = 0;
+    for (long i = 0; i < magnitud; i++) {
+        if (isspace(contenido[i]) && contenido[i] == ' ') {
+            espacios++;
+        }
+    }
+     printf("\n--- Contenido del archivo ---\n");
+    printf("%s\n", contenido);
+
+    printf("\n--- Estadísticas ---\n");
+    printf("Cantidad total de caracteres: %ld\n", magnitud);
+    printf("Cantidad de espacios en el texto: %d\n", espacios);
+
+    free(contenido);
+    fclose(archivo);
 }
 
 void calcular_estadisticas() {
