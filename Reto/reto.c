@@ -90,33 +90,55 @@ void ingresar_archivo() {
         return; 
     }
    
-     rewind(archivo);
-
-     for (long i = 0; i < magnitud; i++) {
-        contenido[i] = fgetc(archivo);
-    }
+     fread(contenido, 1, magnitud, archivo);
     contenido[magnitud] = '\0';
 
-     int espacios = 0;
-    for (long i = 0; i < magnitud; i++) {
-        if (isspace(contenido[i]) && contenido[i] == ' ') {
-            espacios++;
-        }
-    }
-     printf("\n--- Contenido del archivo ---\n");
-    printf("%s\n", contenido);
-
-    printf("\n--- Estadísticas ---\n");
-    printf("Cantidad total de caracteres: %ld\n", magnitud);
-    printf("Cantidad de espacios en el texto: %d\n", espacios);
-
-    free(contenido);
     fclose(archivo);
+    return contenido;
 }
 
 void calcular_estadisticas() {
     printf("Función para calcular estadísticas.\n");
+    printf("%s\n", contenido);
+
+    long caracteres = 0;
+    int palabras = 0;
+    int espacios = 0;
+    int lineas = 0;
+
+    int en_palabra = 0;
+
+    for (long i = 0; contenido[i] != '\0'; i++) {
+        char c = contenido[i];
+        if (c != '\n') 
+            caracteres++;
+
+        if (c == ' ')
+            espacios++;
+
+        if (c == '\n')
+            lineas++;
+
+        if (!isspace(c) && !en_palabra) {
+            en_palabra = 1;
+            palabras++;
+        } else if (isspace(c)) {
+            en_palabra = 0;
+        }
+    }
+
+    // Si el texto no termina con \n, hay una línea más
+    if (strlen(contenido) > 0 && contenido[strlen(contenido) - 1] != '\n') {
+       lineas++;
+    }
+
+    printf("Estadísticas del texto\n");
+    printf("Cantidad total de caracteres (sin \\n): %ld\n", caracteres);
+    printf("Cantidad total de palabras: %d\n", palabras);
+    printf("Cantidad de espacios en el texto: %d\n", espacios);
+    printf("Cantidad de líneas: %d\n", lineas);
 }
+
 
 void calcular_frecuencia_vocales() {
     printf("Función para contar vocales.\n");
