@@ -93,6 +93,16 @@ void ingresar_archivo() {
      fread(contenido, 1, magnitud, archivo);
     contenido[magnitud] = '\0';
 
+    size_t leidos = fread(contenido, 1, magnitud, archivo);
+    contenido[magnitud] = '\0';
+
+    if (leidos == magnitud) {
+        printf("✅ Todo el archivo fue leído correctamente.\n");
+    } else {
+        printf("Error de lectura: se esperaban %ld bytes pero se leyeron %zu.\n", magnitud, leidos);
+        printf("Rectifica tu código o revisa el archivo.\n");
+        
+}
     fclose(archivo);
     return contenido;
 }
